@@ -1,5 +1,4 @@
 import { usePayments } from '@/hooks/usePayments'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -24,79 +23,72 @@ export function PaymentsView() {
   const totalPaid = payments.reduce((sum, payment) => sum + payment.amount, 0)
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-8">
-      <div className="mb-8">
-        <div className="flex items-center gap-4 mb-4">
-          <Button variant="outline" size="sm" asChild>
-            <a href="/">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Overview
-            </a>
-          </Button>
-        </div>
-        
-        <h1 className="text-3xl font-bold text-gray-900">Payment History</h1>
-        <p className="text-gray-600 mt-2">
-          All payment checkpoints organized by date
-        </p>
-      </div>
-
-      {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm text-gray-600">Total Payments</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-900">
-              {formatCurrency(totalPaid)}
+    <div className="min-h-screen bg-gray-50">
+      <div className="mx-auto max-w-6xl px-6 py-8">
+        <div className="rounded-3xl border border-gray-200 bg-white shadow-xl overflow-hidden">
+          {/* Blue Header */}
+          <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 sm:p-8">
+            <div className="flex items-center gap-4 mb-4">
+              <Button variant="outline" size="sm" className="border-white/20 bg-white/10 hover:bg-white/20 text-white" asChild>
+                <a href="/">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to Overview
+                </a>
+              </Button>
             </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm text-gray-600">Payment Checkpoints</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-900">
-              {checkpoints.length}
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm text-gray-600">Individual Payments</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-900">
-              {payments.length}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {checkpoints.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <FileText className="w-12 h-12 text-gray-400 mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No payments recorded</h3>
-            <p className="text-gray-500 text-center mb-6">
-              Payments will appear here once documents are processed
+            <h1 className="text-2xl sm:text-3xl font-bold">Payment History</h1>
+            <p className="mt-2 text-white/80 text-sm">
+              All payment checkpoints organized by date
             </p>
-          </CardContent>
-        </Card>
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>Payment Timeline</CardTitle>
-            <CardDescription>
-              Payments organized by checkpoint date with coverage breakdown
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-8">
+          </div>
+
+          {/* Main Content */}
+          <div className="p-6 sm:p-8">
+            {/* Summary Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="rounded-2xl border border-gray-200 p-4 bg-white shadow-sm">
+            <div className="flex flex-col">
+              <span className="text-xs uppercase tracking-wide text-gray-500">Total Payments</span>
+              <span className="text-lg font-semibold mt-2">{formatCurrency(totalPaid)}</span>
+            </div>
+          </div>
+          
+          <div className="rounded-2xl border border-gray-200 p-4 bg-white shadow-sm">
+            <div className="flex flex-col">
+              <span className="text-xs uppercase tracking-wide text-gray-500">Payment Checkpoints</span>
+              <span className="text-lg font-semibold mt-2">{checkpoints.length}</span>
+            </div>
+          </div>
+          
+          <div className="rounded-2xl border border-gray-200 p-4 bg-white shadow-sm">
+            <div className="flex flex-col">
+              <span className="text-xs uppercase tracking-wide text-gray-500">Individual Payments</span>
+              <span className="text-lg font-semibold mt-2">{payments.length}</span>
+            </div>
+          </div>
+        </div>
+
+        {checkpoints.length === 0 ? (
+          <div className="bg-white p-12" style={{ borderRadius: '1rem', border: '1px solid rgb(229, 231, 235)', boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)' }}>
+            <div className="flex flex-col items-center justify-center">
+              <FileText className="w-12 h-12 text-gray-400 mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">No payments recorded</h3>
+              <p className="text-gray-500 text-center mb-6">
+                Payments will appear here once documents are processed
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white overflow-hidden" style={{ borderRadius: '1.5rem', border: '1px solid rgb(229, 231, 235)', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' }}>
+            <div className="text-white p-6 sm:p-8" style={{ background: 'linear-gradient(to right, rgb(15 23 42), rgb(30 41 59))' }}>
+              <h2 className="text-2xl font-bold">Payment Timeline</h2>
+              <p className="mt-2 text-sm" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                Payments organized by checkpoint date with coverage breakdown
+              </p>
+            </div>
+
+            <div className="p-6 sm:p-8">
+              <div className="space-y-8">
               {checkpoints.map((checkpoint, index) => (
                 <div key={checkpoint.date} className="relative">
                   {index !== checkpoints.length - 1 && (
@@ -119,7 +111,7 @@ export function PaymentsView() {
                           </p>
                         </div>
                         <div className="text-right">
-                          <div className="text-lg font-semibold font-mono-financial text-emerald-600">
+                          <div className="text-lg font-semibold text-emerald-600">
                             {formatCurrency(checkpoint.total)}
                           </div>
                           <p className="text-xs text-gray-500">Total received</p>
@@ -151,7 +143,7 @@ export function PaymentsView() {
                                 )}
                               </TableCell>
                               <TableCell>
-                                <span className={`font-mono-financial font-semibold ${
+                                <span className={`font-medium ${
                                   payment.amount < 0 ? 'text-red-600' : 'text-gray-900'
                                 }`}>
                                   {formatCurrency(payment.amount)}
@@ -175,24 +167,27 @@ export function PaymentsView() {
                     </div>
                   </div>
                 </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* CTA */}
-      <Card className="mt-8 bg-emerald-50 border-emerald-200">
-        <CardContent className="flex flex-col sm:flex-row items-center justify-between py-6">
-          <div>
-            <h3 className="font-semibold text-emerald-900">Upload more payment documents</h3>
-            <p className="text-sm text-emerald-800">Add EOBs, payment letters, or photos of checks</p>
           </div>
-          <Button className="bg-emerald-600 hover:bg-emerald-700 mt-4 sm:mt-0" asChild>
-            <a href="/">Upload Documents</a>
-          </Button>
-        </CardContent>
-      </Card>
+        )}
+
+        {/* CTA */}
+        <div className="mt-8 bg-emerald-50 p-5" style={{ borderRadius: '1rem', border: '1px solid rgb(167, 243, 208)' }}>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <div className="text-sm font-semibold text-emerald-900">Upload more payment documents</div>
+              <div className="text-sm text-emerald-900/80">Add EOBs, payment letters, or photos of checks</div>
+            </div>
+            <Button className="bg-emerald-600 hover:bg-emerald-700" asChild>
+              <a href="/">Upload Documents</a>
+            </Button>
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

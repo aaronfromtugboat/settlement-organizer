@@ -1,5 +1,4 @@
 import { usePayments } from '@/hooks/usePayments'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -72,18 +71,19 @@ export function CoveragePaymentsView({ coverageType }: CoveragePaymentsViewProps
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-8">
-      <div className="mb-8">
-        <div className="flex items-center gap-4 mb-4">
-          <Button variant="outline" size="sm" asChild>
-            <a href="/payments">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              All Payments
-            </a>
-          </Button>
-        </div>
-        
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-gray-50">
+      <div className="mx-auto max-w-6xl px-6 py-8">
+        <div className="mb-8">
+          <div className="flex items-center gap-4 mb-6">
+            <Button variant="outline" size="sm" asChild>
+              <a href="/payments">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                All Payments
+              </a>
+            </Button>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
               {getCoverageLabel(coverageType)}
@@ -92,78 +92,61 @@ export function CoveragePaymentsView({ coverageType }: CoveragePaymentsViewProps
               Payment history for this coverage type
             </p>
           </div>
-          
-          <Select value={coverageType} onValueChange={handleCoverageChange}>
-            <SelectTrigger className="w-64">
-              <SelectValue placeholder="Select coverage" />
-              <ChevronDown className="w-4 h-4 ml-2" />
-            </SelectTrigger>
-            <SelectContent>
-              {coverageTypes.map((type) => (
-                <SelectItem key={type} value={type}>
-                  {getCoverageLabel(type)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            
+            <Select value={coverageType} onValueChange={handleCoverageChange}>
+              <SelectTrigger className="w-full sm:w-64">
+                <SelectValue placeholder="Select coverage" />
+                <ChevronDown className="w-4 h-4 ml-2" />
+              </SelectTrigger>
+              <SelectContent>
+                {coverageTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {getCoverageLabel(type)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-      </div>
 
-      {/* Coverage Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm text-gray-600">Coverage Limit</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xl font-bold font-mono-financial text-gray-900">
-              {formatCurrency(limit)}
+        {/* Coverage Summary */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+          <div className="rounded-2xl border border-gray-200 p-4 bg-white shadow-sm">
+            <div className="flex flex-col">
+              <span className="text-xs uppercase tracking-wide text-gray-500">Coverage Limit</span>
+              <span className="text-lg font-semibold mt-2">{formatCurrency(limit)}</span>
             </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm text-gray-600">Total Paid</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xl font-bold font-mono-financial text-orange-600">
-              {formatCurrency(totalPaid)}
+          </div>
+          
+          <div className="rounded-2xl border border-gray-200 p-4 bg-white shadow-sm">
+            <div className="flex flex-col">
+              <span className="text-xs uppercase tracking-wide text-gray-500">Total Paid</span>
+              <span className="text-lg font-semibold text-orange-600 mt-2">{formatCurrency(totalPaid)}</span>
             </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm text-gray-600">Remaining</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xl font-bold font-mono-financial text-emerald-600">
-              {formatCurrency(remaining)}
+          </div>
+          
+          <div className="rounded-2xl border border-gray-200 p-4 bg-white shadow-sm">
+            <div className="flex flex-col">
+              <span className="text-xs uppercase tracking-wide text-gray-500">Remaining</span>
+              <span className="text-lg font-semibold text-emerald-600 mt-2">{formatCurrency(remaining)}</span>
             </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm text-gray-600">Utilization</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              <div className="text-xl font-bold text-gray-900">
-                {Math.round(utilization)}%
+          </div>
+          
+          <div className="rounded-2xl border border-gray-200 p-4 bg-white shadow-sm">
+            <div className="flex flex-col">
+              <span className="text-xs uppercase tracking-wide text-gray-500">Utilization</span>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="text-lg font-semibold">{Math.round(utilization)}%</span>
+                <Badge variant={utilization === 0 ? 'secondary' : utilization < 50 ? 'success' : utilization < 100 ? 'warning' : 'destructive'}>
+                  {utilization === 0 ? 'Untapped' : utilization < 50 ? 'Available' : utilization < 100 ? 'Partial' : 'Exhausted'}
+                </Badge>
               </div>
-              <Badge variant={utilization === 0 ? 'secondary' : utilization < 50 ? 'success' : utilization < 100 ? 'warning' : 'destructive'}>
-                {utilization === 0 ? 'Untapped' : utilization < 50 ? 'Available' : utilization < 100 ? 'Partial' : 'Exhausted'}
-              </Badge>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </div>
 
-      {/* Progress Bar */}
-      <Card className="mb-8">
-        <CardContent className="pt-6">
+        {/* Progress Bar */}
+        <div className="rounded-2xl border border-gray-200 bg-white shadow-sm mb-8 p-6">
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">Coverage Utilization</span>
@@ -176,29 +159,29 @@ export function CoveragePaymentsView({ coverageType }: CoveragePaymentsViewProps
               />
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      {coveragePayments.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <FileText className="w-12 h-12 text-gray-400 mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No payments for this coverage</h3>
-            <p className="text-gray-500 text-center mb-6">
-              Payments for {getCoverageLabel(coverageType)} will appear here once processed
-            </p>
-          </CardContent>
-        </Card>
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>Payment History</CardTitle>
-            <CardDescription>
-              {coveragePayments.length} payment{coveragePayments.length !== 1 ? 's' : ''} for {getCoverageLabel(coverageType)}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
+        {coveragePayments.length === 0 ? (
+          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-12">
+            <div className="flex flex-col items-center justify-center">
+              <FileText className="w-12 h-12 text-gray-400 mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">No payments for this coverage</h3>
+              <p className="text-gray-500 text-center mb-6">
+                Payments for {getCoverageLabel(coverageType)} will appear here once processed
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="rounded-3xl border border-gray-200 bg-white shadow-xl overflow-hidden">
+            <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 sm:p-8">
+              <h2 className="text-2xl font-bold">Payment History</h2>
+              <p className="mt-2 text-white/80 text-sm">
+                {coveragePayments.length} payment{coveragePayments.length !== 1 ? 's' : ''} for {getCoverageLabel(coverageType)}
+              </p>
+            </div>
+
+            <div className="p-6 sm:p-8">
+              <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Date</TableHead>
@@ -219,7 +202,7 @@ export function CoveragePaymentsView({ coverageType }: CoveragePaymentsViewProps
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <span className={`font-mono-financial font-semibold ${
+                          <span className={`font-medium ${
                             payment.amount < 0 ? 'text-red-600' : 'text-gray-900'
                           }`}>
                             {formatCurrency(payment.amount)}
@@ -249,24 +232,25 @@ export function CoveragePaymentsView({ coverageType }: CoveragePaymentsViewProps
                       </TableCell>
                     </TableRow>
                   ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* CTA */}
-      <Card className="mt-8 bg-emerald-50 border-emerald-200">
-        <CardContent className="flex flex-col sm:flex-row items-center justify-between py-6">
-          <div>
-            <h3 className="font-semibold text-emerald-900">Upload more payment documents</h3>
-            <p className="text-sm text-emerald-800">Add EOBs, payment letters, or photos of checks</p>
+                </TableBody>
+              </Table>
+            </div>
           </div>
-          <Button className="bg-emerald-600 hover:bg-emerald-700 mt-4 sm:mt-0" asChild>
-            <a href="/">Upload Documents</a>
-          </Button>
-        </CardContent>
-      </Card>
+        )}
+
+        {/* CTA */}
+        <div className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <div className="text-sm font-semibold text-emerald-900">Upload more payment documents</div>
+              <div className="text-sm text-emerald-900/80">Add EOBs, payment letters, or photos of checks</div>
+            </div>
+            <Button className="bg-emerald-600 hover:bg-emerald-700" asChild>
+              <a href="/">Upload Documents</a>
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
