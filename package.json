@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "tsc && vite build && cp _headers _redirects dist/",
     "preview": "vite preview",
-    "deploy": "npm run build && wrangler pages deploy dist"
+    "deploy": "npm run build && wrangler pages deploy dist --project-name=settlement-organizer"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
