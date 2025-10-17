@@ -168,11 +168,11 @@ function Gauge({ value }: { value: number }) {
     background: `conic-gradient(rgb(34 197 94) ${angle}deg, rgb(229 231 235) ${angle}deg 360deg)`,
   };
   return (
-    <div className="relative h-36 w-36 rounded-full" style={bg}>
+    <div className="relative h-36 w-36 rounded-full flex-shrink-0 mx-auto" style={bg}>
       <div className="absolute inset-3 bg-white rounded-full flex items-center justify-center shadow-inner">
         <div className="text-center leading-tight">
-          <div className="text-xs text-gray-500">Utilization</div>
-          <div className="text-2xl font-semibold">{percent(value)}</div>
+          <div className="text-xs text-gray-700 font-medium">Utilization</div>
+          <div className="text-2xl font-semibold text-gray-900">{percent(value)}</div>
         </div>
       </div>
     </div>
@@ -268,8 +268,35 @@ export default function InsuranceSettlementReport() {
         <div className="rounded-3xl border border-gray-200 bg-white shadow-xl overflow-hidden">
           {/* Hero band */}
           <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 sm:p-8">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-              <div>
+            {/* Mobile/Tablet: Stacked layout */}
+            <div className="flex flex-col items-center gap-6 lg:hidden">
+              {/* Title section - above circle */}
+              <div className="text-center max-w-2xl">
+                <div className="text-emerald-300 text-xs uppercase tracking-widest">Wildfire Total Loss</div>
+                <h1 className="text-2xl sm:text-3xl font-bold mt-1">What's left to rebuild?</h1>
+                <p className="mt-2 text-white/80 text-sm">
+                  A simple snapshot of your insurance coverages showing limits, amounts paid, and
+                  what remains available for your rebuild.
+                </p>
+              </div>
+              
+              {/* Gauge circle - centered */}
+              <div className="py-4">
+                <Gauge value={totals.utilization} />
+              </div>
+              
+              {/* Stats grid - below circle */}
+              <div className="grid grid-cols-2 gap-x-8 gap-y-6 w-full max-w-3xl">
+                <Stat label="Total Coverage" value={currency(totals.limit)} />
+                <Stat label="Paid to Date" value={currency(totals.paid)} />
+                <Stat label="Remaining" value={currency(totals.remaining)} />
+                <Stat label="Coverage Lines" value={settlementData.categories.length.toString()} />
+              </div>
+            </div>
+            
+            {/* Desktop: Horizontal layout */}
+            <div className="hidden lg:flex lg:items-center lg:justify-between gap-6">
+              <div className="flex-1">
                 <div className="text-emerald-300 text-xs uppercase tracking-widest">Wildfire Total Loss</div>
                 <h1 className="text-2xl sm:text-3xl font-bold mt-1">What's left to rebuild?</h1>
                 <p className="mt-2 text-white/80 max-w-xl text-sm">
