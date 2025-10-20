@@ -47,6 +47,10 @@ export default {
           ale: 'rgb(var(--category-ale))',
           'personal-property': 'rgb(var(--category-personal-property))',
           'all-coverages': 'rgb(var(--category-all-coverages))',
+          dwelling: 'rgb(var(--category-dwelling))',
+          'other-structures': 'rgb(var(--category-other-structures))',
+          trees: 'rgb(var(--category-trees))',
+          'building-code': 'rgb(var(--category-building-code))',
         },
       },
       borderRadius: {

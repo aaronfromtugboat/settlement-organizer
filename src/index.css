@@ -30,6 +30,12 @@
     --category-ale: 245 158 11;             /* Amber */
     --category-personal-property: 236 72 153; /* Pink */
     --category-all-coverages: 34 197 94;    /* Emerald/Green */
+    
+    /* Rebuild Sub-categories - Blue family variants */
+    --category-dwelling: 37 99 235;         /* Bright Blue */
+    --category-other-structures: 59 130 246; /* Standard Blue */
+    --category-trees: 96 165 250;           /* Light Blue */
+    --category-building-code: 30 64 175;    /* Dark Blue */
   }
 }
 

@@ -1,38 +1,84 @@
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ChevronDown } from 'lucide-react'
 
 const currency = (n: number) =>
   n.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 
 const percent = (n: number) => `${Math.round(n)}%`;
 
-// Rebuild coverage lines only (everything except ALE and Personal Property)
-const rebuildData = {
-  lastUpdated: "2025-05-09",
-  categories: [
-    { key: "dwelling", label: "Dwelling (Coverage A)", icon: "🏠", limit: 1009157.00, paid: 981649.41 },
-    { key: "dwelling_debris", label: "Dwelling Debris Removal", icon: "🗑️", limit: 50457.85, paid: 0 },
-    { key: "other_structures", label: "Other Structures (Coverage B)", icon: "🏘️", limit: 100916.00, paid: 100916.00 },
-    { key: "other_structures_debris", label: "Other Structures Debris Removal", icon: "🗑️", limit: 5045.80, paid: 5045.80 },
-    { key: "trees_landscaping", label: "Trees & Landscaping", icon: "🌲", limit: 50457.85, paid: 50457.85 },
-    { key: "extended_dwelling", label: "Extended Dwelling Limit", icon: "➕", limit: 504578.50, paid: 0 },
-    { key: "extended_dwelling_debris", label: "Extended Dwelling Debris Removal", icon: "➕", limit: 25228.93, paid: 0 },
-    { key: "extended_other_structures", label: "Extended Other Structures", icon: "➕", limit: 50457.85, paid: 2461.41 },
-    { key: "extended_other_structures_debris", label: "Extended Other Structures Debris", icon: "➕", limit: 2522.89, paid: 0 },
-    { key: "building_code", label: "Building Code / Ordinance & Law", icon: "⚖️", limit: 100916.00, paid: 82238.71 },
-  ],
-};
+// Grouped rebuild data
+const rebuildGroups = [
+  {
+    id: 'dwelling',
+    label: 'Dwelling (Coverage A)',
+    icon: '🏠',
+    color: 'dwelling',
+    items: [
+      { key: "dwelling", label: "Primary Dwelling", limit: 1009157.00, paid: 981649.41 },
+      { key: "dwelling_debris", label: "Debris Removal", limit: 50457.85, paid: 0 },
+      { key: "extended_dwelling", label: "Extended Limit", limit: 504578.50, paid: 0 },
+      { key: "extended_dwelling_debris", label: "Extended Debris Removal", limit: 25228.93, paid: 0 },
+    ]
+  },
+  {
+    id: 'other_structures',
+    label: 'Other Structures (Coverage B)',
+    icon: '🏘️',
+    color: 'other-structures',
+    items: [
+      { key: "other_structures", label: "Primary Structures", limit: 100916.00, paid: 100916.00 },
+      { key: "other_structures_debris", label: "Debris Removal", limit: 5045.80, paid: 5045.80 },
+      { key: "extended_other_structures", label: "Extended Limit", limit: 50457.85, paid: 2461.41 },
+      { key: "extended_other_structures_debris", label: "Extended Debris Removal", limit: 2522.89, paid: 0 },
+    ]
+  },
+  {
+    id: 'trees',
+    label: 'Trees & Landscaping',
+    icon: '🌲',
+    color: 'trees',
+    items: [
+      { key: "trees_landscaping", label: "Trees & Landscaping", limit: 50457.85, paid: 50457.85 },
+    ]
+  },
+  {
+    id: 'building_code',
+    label: 'Building Code / Ordinance & Law',
+    icon: '⚖️',
+    color: 'building-code',
+    items: [
+      { key: "building_code", label: "Building Code Upgrades", limit: 100916.00, paid: 82238.71 },
+    ]
+  },
+];
 
 function computeTotals() {
-  const limit = rebuildData.categories.reduce((s, c) => s + c.limit, 0);
-  const paid = rebuildData.categories.reduce((s, c) => s + Math.min(c.paid, c.limit), 0);
+  let totalLimit = 0;
+  let totalPaid = 0;
+  
+  rebuildGroups.forEach(group => {
+    group.items.forEach(item => {
+      totalLimit += item.limit;
+      totalPaid += Math.min(item.paid, item.limit);
+    });
+  });
+  
+  const remaining = Math.max(0, totalLimit - totalPaid);
+  const utilization = totalLimit ? (totalPaid / totalLimit) * 100 : 0;
+  return { limit: totalLimit, paid: totalPaid, remaining, utilization };
+}
+
+function computeGroupTotals(items: typeof rebuildGroups[0]['items']) {
+  const limit = items.reduce((s, c) => s + c.limit, 0);
+  const paid = items.reduce((s, c) => s + Math.min(c.paid, c.limit), 0);
   const remaining = Math.max(0, limit - paid);
   const utilization = limit ? (paid / limit) * 100 : 0;
   return { limit, paid, remaining, utilization };
 }
 
 function Gauge({ value }: { value: number }) {
-  const circumference = 2 * Math.PI * 62; // radius is 62 (68 - 6 for stroke width)
+  const circumference = 2 * Math.PI * 62;
   const dashArray = `${(value / 100) * circumference} ${circumference}`;
   
   return (
@@ -77,7 +123,7 @@ function Stat({ label, value, sub }: { label: string; value: string; sub?: strin
   );
 }
 
-function TradeLine({ item }: { item: typeof rebuildData.categories[0] }) {
+function SubItem({ item, color }: { item: typeof rebuildGroups[0]['items'][0]; color: string }) {
   const remaining = Math.max(0, item.limit - item.paid);
   const util = item.limit ? (item.paid / item.limit) * 100 : 0;
   
@@ -87,36 +133,101 @@ function TradeLine({ item }: { item: typeof rebuildData.categories[0] }) {
   
   return (
     <div 
-      className="rounded-2xl border border-gray-200 p-4 bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+      className="rounded-xl border border-gray-200 p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors"
       onClick={handleClick}
     >
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="text-2xl" aria-hidden>{item.icon}</div>
-          <div className="min-w-0">
-            <div className="font-medium truncate">{item.label}</div>
-            <div className="text-xs text-gray-500">Coverage limit {currency(item.limit)}</div>
-          </div>
+      <div className="flex items-center justify-between gap-4 mb-2">
+        <div className="min-w-0 flex-1">
+          <div className="text-sm font-medium truncate">{item.label}</div>
+          <div className="text-xs text-gray-500">Limit {currency(item.limit)}</div>
         </div>
-        <div className="hidden sm:block text-right">
-          <div className="text-sm text-gray-600">Used</div>
-          <div className="font-medium">{currency(item.paid)}</div>
-        </div>
-        <div className="hidden sm:block text-right">
-          <div className="text-sm text-gray-600">Remaining</div>
-          <div className="font-medium">{currency(remaining)}</div>
+        <div className="text-right">
+          <div className="text-sm font-medium">{currency(item.paid)}</div>
+          <div className="text-xs text-gray-500">paid</div>
         </div>
       </div>
+      <div className={`h-1.5 w-full bg-category-${color}/20 rounded-full overflow-hidden`}>
+        <div
+          className={`h-1.5 bg-category-${color} rounded-full`}
+          style={{ width: `${Math.min(100, Math.max(0, util))}%` }}
+        />
+      </div>
+    </div>
+  );
+}
 
-      <div className="mt-3">
-        <div className="h-2 w-full bg-category-rebuild/20 rounded-full overflow-hidden">
-          <div
-            className="h-2 bg-category-rebuild rounded-full"
-            style={{ width: `${Math.min(100, Math.max(0, util))}%` }}
-          />
+function GroupCard({ group }: { group: typeof rebuildGroups[0] }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const totals = computeGroupTotals(group.items);
+  const hasSubItems = group.items.length > 1;
+  
+  const handleMainClick = () => {
+    if (!hasSubItems) {
+      window.location.href = `/payments/${group.items[0].key}`;
+    }
+  };
+  
+  return (
+    <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+      <div 
+        className={`p-4 ${hasSubItems ? '' : 'cursor-pointer hover:bg-gray-50'} transition-colors`}
+        onClick={handleMainClick}
+      >
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="text-2xl" aria-hidden>{group.icon}</div>
+            <div className="min-w-0 flex-1">
+              <div className="font-medium truncate">{group.label}</div>
+              <div className="text-xs text-gray-500">
+                {hasSubItems ? `${group.items.length} sub-coverages • ` : ''}
+                Total limit {currency(totals.limit)}
+              </div>
+            </div>
+          </div>
+          
+          <div className="hidden sm:block text-right">
+            <div className="text-sm text-gray-600">Used</div>
+            <div className="font-medium">{currency(totals.paid)}</div>
+          </div>
+          <div className="hidden sm:block text-right">
+            <div className="text-sm text-gray-600">Remaining</div>
+            <div className="font-medium">{currency(totals.remaining)}</div>
+          </div>
+          
+          {hasSubItems && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsExpanded(!isExpanded);
+              }}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              aria-label={isExpanded ? 'Collapse' : 'Expand'}
+            >
+              <ChevronDown 
+                className={`w-5 h-5 text-gray-600 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+              />
+            </button>
+          )}
         </div>
-        <div className="mt-1 text-xs text-gray-500">{percent(util)} of limit used</div>
+
+        <div className="mt-3">
+          <div className={`h-2 w-full bg-category-${group.color}/20 rounded-full overflow-hidden`}>
+            <div
+              className={`h-2 bg-category-${group.color} rounded-full`}
+              style={{ width: `${Math.min(100, Math.max(0, totals.utilization))}%` }}
+            />
+          </div>
+          <div className="mt-1 text-xs text-gray-500">{percent(totals.utilization)} of limit used</div>
+        </div>
       </div>
+      
+      {hasSubItems && isExpanded && (
+        <div className="px-4 pb-4 space-y-2 border-t border-gray-100 pt-3">
+          {group.items.map((item) => (
+            <SubItem key={item.key} item={item} color={group.color} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -157,7 +268,7 @@ export function RebuildView() {
                 <Stat label="Total Coverage" value={currency(totals.limit)} />
                 <Stat label="Paid to Date" value={currency(totals.paid)} />
                 <Stat label="Remaining" value={currency(totals.remaining)} />
-                <Stat label="Coverage Lines" value={rebuildData.categories.length.toString()} />
+                <Stat label="Coverage Groups" value={rebuildGroups.length.toString()} />
               </div>
             </div>
             
@@ -175,7 +286,7 @@ export function RebuildView() {
                   <Stat label="Total Coverage" value={currency(totals.limit)} />
                   <Stat label="Paid to Date" value={currency(totals.paid)} />
                   <Stat label="Remaining" value={currency(totals.remaining)} />
-                  <Stat label="Coverage Lines" value={rebuildData.categories.length.toString()} />
+                  <Stat label="Coverage Groups" value={rebuildGroups.length.toString()} />
                 </div>
               </div>
             </div>
@@ -184,13 +295,13 @@ export function RebuildView() {
           {/* Main Content */}
           <div className="p-6 sm:p-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Coverage Lines</h2>
-              <div className="text-xs text-gray-500">Limit • used • remaining</div>
+              <h2 className="text-lg font-semibold">Coverage Groups</h2>
+              <div className="text-xs text-gray-500">Click to expand subcoverages</div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {rebuildData.categories.map((c) => (
-                <TradeLine key={c.key} item={c} />
+              {rebuildGroups.map((group) => (
+                <GroupCard key={group.id} group={group} />
               ))}
             </div>
           </div>
@@ -200,4 +311,3 @@ export function RebuildView() {
     </div>
   );
 }
-
