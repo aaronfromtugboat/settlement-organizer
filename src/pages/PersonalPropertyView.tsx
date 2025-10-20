@@ -83,7 +83,7 @@ function TradeLine({ item }: { item: typeof ppData.categories[0] }) {
       </div>
 
       <div className="mt-3">
-        <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+        <div className="h-2 w-full bg-category-personal-property/20 rounded-full overflow-hidden">
           <div
             className="h-2 bg-category-personal-property rounded-full"
             style={{ width: `${Math.min(100, Math.max(0, util))}%` }}

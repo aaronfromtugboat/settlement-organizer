@@ -222,9 +222,9 @@ function TradeLine({ item }: { item: typeof settlementData.categories[0] }) {
 
       {/* Progress bar */}
       <div className="mt-3">
-        <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+        <div className="h-2 w-full bg-category-all-coverages/20 rounded-full overflow-hidden">
           <div
-            className="h-2 bg-emerald-500 rounded-full"
+            className="h-2 bg-category-all-coverages rounded-full"
             style={{ width: `${Math.min(100, Math.max(0, util))}%` }}
           />
         </div>

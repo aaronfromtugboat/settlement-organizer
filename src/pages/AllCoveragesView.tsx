@@ -59,7 +59,7 @@ function TradeLine({ item, barColor = 'bg-category-all-coverages' }: { item: typ
       </div>
 
       <div className="mt-3">
-        <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+        <div className={`h-2 w-full rounded-full overflow-hidden ${barColor}/20`}>
           <div
             className={`h-2 ${barColor} rounded-full`}
             style={{ width: `${Math.min(100, Math.max(0, util))}%` }}
