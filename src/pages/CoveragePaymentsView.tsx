@@ -12,20 +12,20 @@ interface CoveragePaymentsViewProps {
 
 // Mock policy data - in real app this would come from API
 const mockPolicy = {
-  dwelling: 1009157,
-  dwelling_debris: 50457.85,
-  other_structures: 100916,
-  other_structures_debris: 5045.80,
-  personal_property: 756867,
-  personal_property_debris: 37843.35,
-  ale: 302747,
-  trees_shrubs_landscaping: 50457.85,
-  extended_dwelling: 504578.50,
-  extended_dwelling_debris: 25228.93,
-  extended_other_structures: 50457.85,
-  extended_other_structures_debris: 2522.89,
-  personal_property_options: 2500,
-  building_code: 100916,
+  dwelling: 336385.67,
+  dwelling_debris: 16819.28,
+  other_structures: 33638.67,
+  other_structures_debris: 1681.93,
+  personal_property: 252289.00,
+  personal_property_debris: 12614.45,
+  ale: 100915.67,
+  trees_shrubs_landscaping: 16819.28,
+  extended_dwelling: 168192.83,
+  extended_dwelling_debris: 8409.64,
+  extended_other_structures: 16819.28,
+  extended_other_structures_debris: 840.96,
+  personal_property_options: 833.33,
+  building_code: 33638.67,
 }
 
 export function CoveragePaymentsView({ coverageType }: CoveragePaymentsViewProps) {

@@ -10,9 +10,9 @@ const percent = (n: number) => `${Math.round(n)}%`;
 const ppData = {
   lastUpdated: "2025-05-09",
   categories: [
-    { key: "personal_property", label: "Personal Property (Coverage C)", icon: "🪑", limit: 756867.00, paid: 491963.55 },
-    { key: "personal_property_debris", label: "Personal Property Debris Removal", icon: "🗑️", limit: 37843.35, paid: 0 },
-    { key: "personal_property_options", label: "Personal Property Options", icon: "🛡️", limit: 2500.00, paid: 0 },
+    { key: "personal_property", label: "Personal Property (Coverage C)", icon: "🪑", limit: 252289.00, paid: 163987.85 },
+    { key: "personal_property_debris", label: "Personal Property Debris Removal", icon: "🗑️", limit: 12614.45, paid: 0 },
+    { key: "personal_property_options", label: "Personal Property Options", icon: "🛡️", limit: 833.33, paid: 0 },
   ],
 };
 

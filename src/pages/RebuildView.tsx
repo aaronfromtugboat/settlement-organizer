@@ -15,10 +15,10 @@ const rebuildGroups = [
     icon: '🏠',
     color: 'dwelling',
     items: [
-      { key: "dwelling", label: "Primary Dwelling", limit: 1009157.00, paid: 981649.41 },
-      { key: "dwelling_debris", label: "Debris Removal", limit: 50457.85, paid: 0 },
-      { key: "extended_dwelling", label: "Extended Limit", limit: 504578.50, paid: 0 },
-      { key: "extended_dwelling_debris", label: "Extended Debris Removal", limit: 25228.93, paid: 0 },
+      { key: "dwelling", label: "Primary Dwelling", limit: 336385.67, paid: 327216.47 },
+      { key: "dwelling_debris", label: "Debris Removal", limit: 16819.28, paid: 0 },
+      { key: "extended_dwelling", label: "Extended Limit", limit: 168192.83, paid: 0 },
+      { key: "extended_dwelling_debris", label: "Extended Debris Removal", limit: 8409.64, paid: 0 },
     ]
   },
   {
@@ -27,10 +27,10 @@ const rebuildGroups = [
     icon: '🏘️',
     color: 'other-structures',
     items: [
-      { key: "other_structures", label: "Primary Structures", limit: 100916.00, paid: 100916.00 },
-      { key: "other_structures_debris", label: "Debris Removal", limit: 5045.80, paid: 5045.80 },
-      { key: "extended_other_structures", label: "Extended Limit", limit: 50457.85, paid: 2461.41 },
-      { key: "extended_other_structures_debris", label: "Extended Debris Removal", limit: 2522.89, paid: 0 },
+      { key: "other_structures", label: "Primary Structures", limit: 33638.67, paid: 33638.67 },
+      { key: "other_structures_debris", label: "Debris Removal", limit: 1681.93, paid: 1681.93 },
+      { key: "extended_other_structures", label: "Extended Limit", limit: 16819.28, paid: 820.47 },
+      { key: "extended_other_structures_debris", label: "Extended Debris Removal", limit: 840.96, paid: 0 },
     ]
   },
   {
@@ -39,7 +39,7 @@ const rebuildGroups = [
     icon: '🌲',
     color: 'trees',
     items: [
-      { key: "trees_landscaping", label: "Trees & Landscaping", limit: 50457.85, paid: 50457.85 },
+      { key: "trees_landscaping", label: "Trees & Landscaping", limit: 16819.28, paid: 16819.28 },
     ]
   },
   {
@@ -48,7 +48,7 @@ const rebuildGroups = [
     icon: '⚖️',
     color: 'building-code',
     items: [
-      { key: "building_code", label: "Building Code Upgrades", limit: 100916.00, paid: 82238.71 },
+      { key: "building_code", label: "Building Code Upgrades", limit: 33638.67, paid: 27412.90 },
     ]
   },
 ];
