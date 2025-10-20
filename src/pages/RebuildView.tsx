@@ -133,9 +133,15 @@ function SubItem({ item, color }: { item: typeof rebuildGroups[0]['items'][0]; c
   
   return (
     <div 
-      className="rounded-xl border border-gray-200 p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors"
+      className="group rounded-xl border border-gray-200 p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors relative"
       onClick={handleClick}
     >
+      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
+          View payments
+        </span>
+      </div>
+      
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0 flex-1">
           <div className="text-sm font-medium truncate">{item.label}</div>
@@ -184,9 +190,17 @@ function GroupCard({ group }: { group: typeof rebuildGroups[0] }) {
   return (
     <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
       <div 
-        className={`p-4 ${hasSubItems ? '' : 'cursor-pointer hover:bg-gray-50'} transition-colors`}
+        className={`group p-4 ${hasSubItems ? '' : 'cursor-pointer hover:bg-gray-50'} transition-colors relative`}
         onClick={handleMainClick}
       >
+        {!hasSubItems && (
+          <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+            <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
+              View payments
+            </span>
+          </div>
+        )}
+        
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0 flex-1">
             <div className="text-2xl" aria-hidden>{group.icon}</div>

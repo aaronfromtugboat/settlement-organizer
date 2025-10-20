@@ -127,11 +127,21 @@ function CategoryCard({
   href: string;
   barColor?: string;
 }) {
+  const isSingleCoverage = count === 1;
+  
   return (
     <div 
-      className="rounded-2xl border border-gray-200 p-4 bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+      className="group rounded-2xl border border-gray-200 p-4 bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow relative"
       onClick={() => window.location.href = href}
     >
+      {isSingleCoverage && (
+        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+          <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
+            View payments
+          </span>
+        </div>
+      )}
+      
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 min-w-0">
           <div className="text-2xl" aria-hidden>{icon}</div>
