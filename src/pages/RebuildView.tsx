@@ -136,7 +136,7 @@ function SubItem({ item, color }: { item: typeof rebuildGroups[0]['items'][0]; c
       className="rounded-xl border border-gray-200 p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors"
       onClick={handleClick}
     >
-      <div className="flex items-center justify-between gap-4 mb-2">
+      <div className="flex items-center justify-between gap-4">
         <div className="min-w-0 flex-1">
           <div className="text-sm font-medium truncate">{item.label}</div>
           <div className="text-xs text-gray-500">Limit {currency(item.limit)}</div>
@@ -146,11 +146,25 @@ function SubItem({ item, color }: { item: typeof rebuildGroups[0]['items'][0]; c
           <div className="text-xs text-gray-500">paid</div>
         </div>
       </div>
-      <div className={`h-1.5 w-full bg-category-${color}/20 rounded-full overflow-hidden`}>
-        <div
-          className={`h-1.5 bg-category-${color} rounded-full`}
-          style={{ width: `${Math.min(100, Math.max(0, util))}%` }}
-        />
+      
+      <div className="mt-2">
+        <div className={`h-1.5 w-full rounded-full overflow-hidden ${
+          color === 'dwelling' ? 'bg-category-dwelling/20' :
+          color === 'other-structures' ? 'bg-category-other-structures/20' :
+          color === 'trees' ? 'bg-category-trees/20' :
+          'bg-category-building-code/20'
+        }`}>
+          <div
+            className={`h-1.5 rounded-full ${
+              color === 'dwelling' ? 'bg-category-dwelling' :
+              color === 'other-structures' ? 'bg-category-other-structures' :
+              color === 'trees' ? 'bg-category-trees' :
+              'bg-category-building-code'
+            }`}
+            style={{ width: `${Math.min(100, Math.max(0, util))}%` }}
+          />
+        </div>
+        <div className="mt-1 text-xs text-gray-500">{percent(util)} of limit used</div>
       </div>
     </div>
   );
@@ -178,7 +192,7 @@ function GroupCard({ group }: { group: typeof rebuildGroups[0] }) {
             <div className="text-2xl" aria-hidden>{group.icon}</div>
             <div className="min-w-0 flex-1">
               <div className="font-medium truncate">{group.label}</div>
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-gray-500 min-h-[2.5rem] line-clamp-2">
                 {hasSubItems ? `${group.items.length} sub-coverages • ` : ''}
                 Total limit {currency(totals.limit)}
               </div>
@@ -211,9 +225,19 @@ function GroupCard({ group }: { group: typeof rebuildGroups[0] }) {
         </div>
 
         <div className="mt-3">
-          <div className={`h-2 w-full bg-category-${group.color}/20 rounded-full overflow-hidden`}>
+          <div className={`h-2 w-full rounded-full overflow-hidden ${
+            group.color === 'dwelling' ? 'bg-category-dwelling/20' :
+            group.color === 'other-structures' ? 'bg-category-other-structures/20' :
+            group.color === 'trees' ? 'bg-category-trees/20' :
+            'bg-category-building-code/20'
+          }`}>
             <div
-              className={`h-2 bg-category-${group.color} rounded-full`}
+              className={`h-2 rounded-full ${
+                group.color === 'dwelling' ? 'bg-category-dwelling' :
+                group.color === 'other-structures' ? 'bg-category-other-structures' :
+                group.color === 'trees' ? 'bg-category-trees' :
+                'bg-category-building-code'
+              }`}
               style={{ width: `${Math.min(100, Math.max(0, totals.utilization))}%` }}
             />
           </div>
@@ -299,9 +323,11 @@ export function RebuildView() {
               <div className="text-xs text-gray-500">Click to expand subcoverages</div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="columns-1 md:columns-2 gap-4 space-y-4">
               {rebuildGroups.map((group) => (
-                <GroupCard key={group.id} group={group} />
+                <div key={group.id} className="break-inside-avoid">
+                  <GroupCard group={group} />
+                </div>
               ))}
             </div>
           </div>
