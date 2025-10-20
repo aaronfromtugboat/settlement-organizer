@@ -71,6 +71,139 @@ function TradeLine({ item, barColor = 'bg-category-all-coverages' }: { item: typ
   );
 }
 
+function NestedGauge({ 
+  allCoverages, 
+  rebuild, 
+  personalProperty, 
+  ale 
+}: { 
+  allCoverages: number;
+  rebuild: number;
+  personalProperty: number;
+  ale: number;
+}) {
+  // Convert percentages to degrees
+  const allAngle = Math.min(100, Math.max(0, allCoverages)) * 3.6;
+  const rebuildAngle = Math.min(100, Math.max(0, rebuild)) * 3.6;
+  const ppAngle = Math.min(100, Math.max(0, personalProperty)) * 3.6;
+  const aleAngle = Math.min(100, Math.max(0, ale)) * 3.6;
+  
+  return (
+    <div className="relative h-36 w-36 rounded-full flex-shrink-0 mx-auto">
+      {/* Background circle for all rings */}
+      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-slate-900 to-slate-800" />
+      
+      {/* Outermost Ring - All Coverages (Green) - 12px thick */}
+      <svg className="absolute inset-0 -rotate-90" viewBox="0 0 136 136">
+        <circle
+          cx="68"
+          cy="68"
+          r="62"
+          fill="none"
+          stroke={`rgb(var(--category-all-coverages) / 0.2)`}
+          strokeWidth="12"
+        />
+        <circle
+          cx="68"
+          cy="68"
+          r="62"
+          fill="none"
+          stroke={`rgb(var(--category-all-coverages))`}
+          strokeWidth="12"
+          strokeDasharray={`${(allAngle / 360) * 389.56} 389.56`}
+          strokeLinecap="round"
+        />
+      </svg>
+      
+      {/* Second Ring - Rebuild (Blue) - 12px thick */}
+      <svg className="absolute inset-0 -rotate-90" viewBox="0 0 136 136">
+        <circle
+          cx="68"
+          cy="68"
+          r="50"
+          fill="none"
+          stroke={`rgb(var(--category-rebuild) / 0.2)`}
+          strokeWidth="12"
+        />
+        <circle
+          cx="68"
+          cy="68"
+          r="50"
+          fill="none"
+          stroke={`rgb(var(--category-rebuild))`}
+          strokeWidth="12"
+          strokeDasharray={`${(rebuildAngle / 360) * 314.16} 314.16`}
+          strokeLinecap="round"
+        />
+      </svg>
+      
+      {/* Third Ring - Personal Property (Pink) - 12px thick */}
+      <svg className="absolute inset-0 -rotate-90" viewBox="0 0 136 136">
+        <circle
+          cx="68"
+          cy="68"
+          r="38"
+          fill="none"
+          stroke={`rgb(var(--category-personal-property) / 0.2)`}
+          strokeWidth="12"
+        />
+        <circle
+          cx="68"
+          cy="68"
+          r="38"
+          fill="none"
+          stroke={`rgb(var(--category-personal-property))`}
+          strokeWidth="12"
+          strokeDasharray={`${(ppAngle / 360) * 238.76} 238.76`}
+          strokeLinecap="round"
+        />
+      </svg>
+      
+      {/* Innermost Ring - ALE (Amber) - 12px thick */}
+      <svg className="absolute inset-0 -rotate-90" viewBox="0 0 136 136">
+        <circle
+          cx="68"
+          cy="68"
+          r="26"
+          fill="none"
+          stroke={`rgb(var(--category-ale) / 0.2)`}
+          strokeWidth="12"
+        />
+        <circle
+          cx="68"
+          cy="68"
+          r="26"
+          fill="none"
+          stroke={`rgb(var(--category-ale))`}
+          strokeWidth="12"
+          strokeDasharray={`${(aleAngle / 360) * 163.36} 163.36`}
+          strokeLinecap="round"
+        />
+      </svg>
+      
+      {/* Center Donut Hole - Dark Blue Background */}
+      <div 
+        className="absolute rounded-full bg-gradient-to-r from-slate-900 to-slate-800"
+        style={{
+          top: '54px',
+          left: '54px',
+          right: '54px',
+          bottom: '54px'
+        }}
+      />
+    </div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex flex-col">
+      <span className="text-xs uppercase tracking-wide text-gray-500">{label}</span>
+      <span className="text-lg font-semibold">{value}</span>
+    </div>
+  );
+}
+
 function CategorySection({ title, items, barColor = 'bg-category-all-coverages' }: { title: string; items: typeof settlementData.categories; barColor?: string }) {
   const totalLimit = items.reduce((s, c) => s + c.limit, 0);
   const totalPaid = items.reduce((s, c) => s + Math.min(c.paid, c.limit), 0);
@@ -113,6 +246,21 @@ export function AllCoveragesView() {
   const totalLimit = settlementData.categories.reduce((s, c) => s + c.limit, 0);
   const totalPaid = settlementData.categories.reduce((s, c) => s + Math.min(c.paid, c.limit), 0);
   const totalRemaining = Math.max(0, totalLimit - totalPaid);
+  
+  // Calculate utilization for each category
+  const allUtilization = totalLimit ? (totalPaid / totalLimit) * 100 : 0;
+  
+  const rebuildLimit = rebuildItems.reduce((s, c) => s + c.limit, 0);
+  const rebuildPaid = rebuildItems.reduce((s, c) => s + Math.min(c.paid, c.limit), 0);
+  const rebuildUtilization = rebuildLimit ? (rebuildPaid / rebuildLimit) * 100 : 0;
+  
+  const ppLimit = ppItems.reduce((s, c) => s + c.limit, 0);
+  const ppPaid = ppItems.reduce((s, c) => s + Math.min(c.paid, c.limit), 0);
+  const ppUtilization = ppLimit ? (ppPaid / ppLimit) * 100 : 0;
+  
+  const aleLimit = aleItems.reduce((s, c) => s + c.limit, 0);
+  const alePaid = aleItems.reduce((s, c) => s + Math.min(c.paid, c.limit), 0);
+  const aleUtilization = aleLimit ? (alePaid / aleLimit) * 100 : 0;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -129,24 +277,54 @@ export function AllCoveragesView() {
                 </a>
               </Button>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold">All Coverage Lines</h1>
-            <p className="mt-2 text-white/80 text-sm">
-              Detailed view of all {settlementData.categories.length} coverage lines grouped by category
-            </p>
             
-            {/* Summary Stats */}
-            <div className="mt-6 grid grid-cols-3 gap-6">
-              <div>
-                <div className="text-xs uppercase tracking-wide text-white/60">Total Coverage</div>
-                <div className="text-xl font-semibold mt-1">{currency(totalLimit)}</div>
+            {/* Mobile/Tablet: Stacked layout */}
+            <div className="flex flex-col items-center gap-6 lg:hidden">
+              <div className="text-center max-w-2xl">
+                <h1 className="text-2xl sm:text-3xl font-bold">All Coverage Lines</h1>
+                <p className="mt-2 text-white/80 text-sm">
+                  Detailed view of all {settlementData.categories.length} coverage lines grouped by category
+                </p>
               </div>
-              <div>
-                <div className="text-xs uppercase tracking-wide text-white/60">Paid to Date</div>
-                <div className="text-xl font-semibold mt-1">{currency(totalPaid)}</div>
+              
+              <div className="py-4">
+                <NestedGauge 
+                  allCoverages={allUtilization}
+                  rebuild={rebuildUtilization}
+                  personalProperty={ppUtilization}
+                  ale={aleUtilization}
+                />
               </div>
-              <div>
-                <div className="text-xs uppercase tracking-wide text-white/60">Remaining</div>
-                <div className="text-xl font-semibold mt-1">{currency(totalRemaining)}</div>
+              
+              <div className="grid grid-cols-2 gap-x-8 gap-y-6 w-full max-w-3xl">
+                <Stat label={`Rebuild: ${percent(rebuildUtilization)}`} value={currency(rebuildPaid)} />
+                <Stat label={`Personal Property: ${percent(ppUtilization)}`} value={currency(ppPaid)} />
+                <Stat label={`ALE: ${percent(aleUtilization)}`} value={currency(alePaid)} />
+                <Stat label={`All Coverages: ${percent(allUtilization)}`} value={currency(totalPaid)} />
+              </div>
+            </div>
+            
+            {/* Desktop: Horizontal layout */}
+            <div className="hidden lg:flex lg:items-center lg:justify-between gap-6">
+              <div className="flex-1">
+                <h1 className="text-2xl sm:text-3xl font-bold">All Coverage Lines</h1>
+                <p className="mt-2 text-white/80 max-w-xl text-sm">
+                  Detailed view of all {settlementData.categories.length} coverage lines grouped by category
+                </p>
+              </div>
+              <div className="flex items-center gap-6">
+                <NestedGauge 
+                  allCoverages={allUtilization}
+                  rebuild={rebuildUtilization}
+                  personalProperty={ppUtilization}
+                  ale={aleUtilization}
+                />
+                <div className="grid grid-cols-2 gap-4">
+                  <Stat label={`Rebuild: ${percent(rebuildUtilization)}`} value={currency(rebuildPaid)} />
+                  <Stat label={`Personal Property: ${percent(ppUtilization)}`} value={currency(ppPaid)} />
+                  <Stat label={`ALE: ${percent(aleUtilization)}`} value={currency(alePaid)} />
+                  <Stat label={`All Coverages: ${percent(allUtilization)}`} value={currency(totalPaid)} />
+                </div>
               </div>
             </div>
           </div>
