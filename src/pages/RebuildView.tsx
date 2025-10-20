@@ -32,12 +32,31 @@ function computeTotals() {
 }
 
 function Gauge({ value }: { value: number }) {
-  const angle = Math.min(100, Math.max(0, value)) * 3.6;
-  const bg = {
-    background: `conic-gradient(rgb(var(--category-rebuild)) ${angle}deg, rgb(229 231 235) ${angle}deg 360deg)`,
-  };
+  const circumference = 2 * Math.PI * 62; // radius is 62 (68 - 6 for stroke width)
+  const dashArray = `${(value / 100) * circumference} ${circumference}`;
+  
   return (
-    <div className="relative h-36 w-36 rounded-full flex-shrink-0 mx-auto" style={bg}>
+    <div className="relative h-36 w-36 rounded-full flex-shrink-0 mx-auto">
+      <svg className="absolute inset-0 -rotate-90" viewBox="0 0 136 136">
+        <circle
+          cx="68"
+          cy="68"
+          r="62"
+          fill="none"
+          stroke="rgb(var(--category-rebuild) / 0.2)"
+          strokeWidth="12"
+        />
+        <circle
+          cx="68"
+          cy="68"
+          r="62"
+          fill="none"
+          stroke="rgb(var(--category-rebuild))"
+          strokeWidth="12"
+          strokeDasharray={dashArray}
+          strokeLinecap="round"
+        />
+      </svg>
       <div className="absolute inset-3 bg-white rounded-full flex items-center justify-center shadow-inner">
         <div className="text-center leading-tight">
           <div className="text-xs text-gray-700 font-medium">Utilization</div>
