@@ -152,9 +152,17 @@ export function CoveragePaymentsView({ coverageType }: CoveragePaymentsViewProps
               <span className="text-gray-600">Coverage Utilization</span>
               <span className="font-medium">{Math.round(utilization)}%</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className={`w-full rounded-full h-2 ${
+              coverageType === 'ale' ? 'bg-category-ale/20' :
+              coverageType === 'personal_property' || coverageType === 'personal_property_debris' || coverageType === 'personal_property_options' ? 'bg-category-personal-property/20' :
+              'bg-category-rebuild/20'
+            }`}>
               <div
-                className="bg-emerald-500 h-2 rounded-full transition-all"
+                className={`h-2 rounded-full transition-all ${
+                  coverageType === 'ale' ? 'bg-category-ale' :
+                  coverageType === 'personal_property' || coverageType === 'personal_property_debris' || coverageType === 'personal_property_options' ? 'bg-category-personal-property' :
+                  'bg-category-rebuild'
+                }`}
                 style={{ width: `${Math.min(100, Math.max(0, utilization))}%` }}
               />
             </div>
