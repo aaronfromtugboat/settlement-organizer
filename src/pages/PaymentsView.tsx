@@ -1,13 +1,36 @@
 import { usePayments } from '@/hooks/usePayments'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { ArrowLeft, FileText, ExternalLink } from 'lucide-react'
 import { formatCurrency, formatDate, getCoverageLabel } from '@/lib/utils'
 import { groupPaymentsByCheckpoint } from '@/lib/calculations'
+import type { CoverageType } from '@/types/schema'
+
+const coverageTypes: CoverageType[] = [
+  'dwelling',
+  'dwelling_debris',
+  'other_structures',
+  'other_structures_debris',
+  'personal_property',
+  'personal_property_debris',
+  'ale',
+  'trees_shrubs_landscaping',
+  'extended_dwelling',
+  'extended_dwelling_debris',
+  'extended_other_structures',
+  'extended_other_structures_debris',
+  'personal_property_options',
+  'building_code',
+]
 
 export function PaymentsView() {
   const { data: payments = [], isLoading } = usePayments('sample-policy-001')
+  
+  const handleCoverageChange = (coverage: string) => {
+    window.location.href = `/payments/${coverage}`
+  }
 
   if (isLoading) {
     return (
@@ -36,10 +59,28 @@ export function PaymentsView() {
                 </a>
               </Button>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold">Payment History</h1>
-            <p className="mt-2 text-white/80 text-sm">
-              All payment checkpoints organized by date
-            </p>
+            
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold">Payment History</h1>
+                <p className="mt-2 text-white/80 text-sm">
+                  All payment checkpoints organized by date
+                </p>
+              </div>
+              
+              <Select onValueChange={handleCoverageChange}>
+                <SelectTrigger className="w-full sm:w-64 bg-white/10 border-white/20 text-white hover:bg-white/20">
+                  <SelectValue placeholder="Jump to coverage..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {coverageTypes.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {getCoverageLabel(type)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* Main Content */}

@@ -1,32 +1,14 @@
 import { usePayments } from '@/hooks/usePayments'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { ArrowLeft, FileText, ExternalLink, ChevronDown } from 'lucide-react'
+import { ArrowLeft, FileText, ExternalLink } from 'lucide-react'
 import { formatCurrency, formatDate, getCoverageLabel } from '@/lib/utils'
 import type { CoverageType } from '@/types/schema'
 
 interface CoveragePaymentsViewProps {
   coverageType: CoverageType
 }
-
-const coverageTypes: CoverageType[] = [
-  'dwelling',
-  'dwelling_debris',
-  'other_structures',
-  'other_structures_debris',
-  'personal_property',
-  'personal_property_debris',
-  'ale',
-  'trees_shrubs_landscaping',
-  'extended_dwelling',
-  'extended_dwelling_debris',
-  'extended_other_structures',
-  'extended_other_structures_debris',
-  'personal_property_options',
-  'building_code',
-]
 
 // Mock policy data - in real app this would come from API
 const mockPolicy = {
@@ -56,10 +38,6 @@ export function CoveragePaymentsView({ coverageType }: CoveragePaymentsViewProps
   const remaining = Math.max(0, limit - totalPaid)
   const utilization = limit ? (totalPaid / limit) * 100 : 0
 
-  const handleCoverageChange = (newCoverage: string) => {
-    window.location.href = `/payments/${newCoverage}`
-  }
-
   if (isLoading) {
     return (
       <div className="mx-auto max-w-6xl px-6 py-8">
@@ -83,7 +61,6 @@ export function CoveragePaymentsView({ coverageType }: CoveragePaymentsViewProps
             </Button>
           </div>
           
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
               {getCoverageLabel(coverageType)}
@@ -91,21 +68,6 @@ export function CoveragePaymentsView({ coverageType }: CoveragePaymentsViewProps
             <p className="text-gray-600 mt-2">
               Payment history for this coverage type
             </p>
-          </div>
-            
-            <Select value={coverageType} onValueChange={handleCoverageChange}>
-              <SelectTrigger className="w-full sm:w-64">
-                <SelectValue placeholder="Select coverage" />
-                <ChevronDown className="w-4 h-4 ml-2" />
-              </SelectTrigger>
-              <SelectContent>
-                {coverageTypes.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {getCoverageLabel(type)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
           </div>
         </div>
 
