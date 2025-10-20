@@ -42,6 +42,12 @@ export default {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        category: {
+          rebuild: 'rgb(var(--category-rebuild))',
+          ale: 'rgb(var(--category-ale))',
+          'personal-property': 'rgb(var(--category-personal-property))',
+          'all-coverages': 'rgb(var(--category-all-coverages))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

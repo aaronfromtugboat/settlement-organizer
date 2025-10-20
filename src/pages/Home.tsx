@@ -95,7 +95,8 @@ function CategoryCard({
   remaining, 
   utilization,
   count,
-  href 
+  href,
+  barColor = 'bg-category-all-coverages'
 }: { 
   title: string; 
   icon: string;
@@ -105,6 +106,7 @@ function CategoryCard({
   utilization: number;
   count: number;
   href: string;
+  barColor?: string;
 }) {
   return (
     <div 
@@ -132,7 +134,7 @@ function CategoryCard({
       <div className="mt-3">
         <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
           <div
-            className="h-2 bg-emerald-500 rounded-full"
+            className={`h-2 ${barColor} rounded-full`}
             style={{ width: `${Math.min(100, Math.max(0, utilization))}%` }}
           />
         </div>
@@ -245,6 +247,7 @@ export function Home() {
                   utilization={rebuildTotals.utilization}
                   count={rebuildTotals.count}
                   href="/rebuild"
+                  barColor="bg-category-rebuild"
                 />
                 
                 <CategoryCard
@@ -256,6 +259,7 @@ export function Home() {
                   utilization={aleTotals.utilization}
                   count={aleTotals.count}
                   href="/payments/ale"
+                  barColor="bg-category-ale"
                 />
                 
                 <CategoryCard
@@ -267,6 +271,7 @@ export function Home() {
                   utilization={ppTotals.utilization}
                   count={ppTotals.count}
                   href="/personal-property"
+                  barColor="bg-category-personal-property"
                 />
                 
                 <CategoryCard
@@ -278,6 +283,7 @@ export function Home() {
                   utilization={totals.utilization}
                   count={settlementData.categories.length}
                   href="/all-coverages"
+                  barColor="bg-category-all-coverages"
                 />
               </div>
 

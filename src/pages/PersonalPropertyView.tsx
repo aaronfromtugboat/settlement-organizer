@@ -27,7 +27,7 @@ function computeTotals() {
 function Gauge({ value }: { value: number }) {
   const angle = Math.min(100, Math.max(0, value)) * 3.6;
   const bg = {
-    background: `conic-gradient(rgb(34 197 94) ${angle}deg, rgb(229 231 235) ${angle}deg 360deg)`,
+    background: `conic-gradient(rgb(var(--category-personal-property)) ${angle}deg, rgb(229 231 235) ${angle}deg 360deg)`,
   };
   return (
     <div className="relative h-36 w-36 rounded-full flex-shrink-0 mx-auto" style={bg}>
@@ -85,7 +85,7 @@ function TradeLine({ item }: { item: typeof ppData.categories[0] }) {
       <div className="mt-3">
         <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
           <div
-            className="h-2 bg-emerald-500 rounded-full"
+            className="h-2 bg-category-personal-property rounded-full"
             style={{ width: `${Math.min(100, Math.max(0, util))}%` }}
           />
         </div>

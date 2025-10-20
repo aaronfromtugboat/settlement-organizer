@@ -27,7 +27,7 @@ const settlementData = {
   ],
 };
 
-function TradeLine({ item }: { item: typeof settlementData.categories[0] }) {
+function TradeLine({ item, barColor = 'bg-category-all-coverages' }: { item: typeof settlementData.categories[0]; barColor?: string }) {
   const remaining = Math.max(0, item.limit - item.paid);
   const util = item.limit ? (item.paid / item.limit) * 100 : 0;
   
@@ -61,7 +61,7 @@ function TradeLine({ item }: { item: typeof settlementData.categories[0] }) {
       <div className="mt-3">
         <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
           <div
-            className="h-2 bg-emerald-500 rounded-full"
+            className={`h-2 ${barColor} rounded-full`}
             style={{ width: `${Math.min(100, Math.max(0, util))}%` }}
           />
         </div>
@@ -71,7 +71,7 @@ function TradeLine({ item }: { item: typeof settlementData.categories[0] }) {
   );
 }
 
-function CategorySection({ title, items }: { title: string; items: typeof settlementData.categories }) {
+function CategorySection({ title, items, barColor = 'bg-category-all-coverages' }: { title: string; items: typeof settlementData.categories; barColor?: string }) {
   const totalLimit = items.reduce((s, c) => s + c.limit, 0);
   const totalPaid = items.reduce((s, c) => s + Math.min(c.paid, c.limit), 0);
   const totalRemaining = Math.max(0, totalLimit - totalPaid);
@@ -98,7 +98,7 @@ function CategorySection({ title, items }: { title: string; items: typeof settle
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {items.map((c) => (
-          <TradeLine key={c.key} item={c} />
+          <TradeLine key={c.key} item={c} barColor={barColor} />
         ))}
       </div>
     </div>
@@ -153,9 +153,9 @@ export function AllCoveragesView() {
 
           {/* Main Content */}
           <div className="p-6 sm:p-8">
-            <CategorySection title="🏗️ Rebuild" items={rebuildItems} />
-            <CategorySection title="💸 Additional Living Expenses" items={aleItems} />
-            <CategorySection title="🪑 Personal Property" items={ppItems} />
+            <CategorySection title="🏗️ Rebuild" items={rebuildItems} barColor="bg-category-rebuild" />
+            <CategorySection title="💸 Additional Living Expenses" items={aleItems} barColor="bg-category-ale" />
+            <CategorySection title="🪑 Personal Property" items={ppItems} barColor="bg-category-personal-property" />
           </div>
           
         </div>

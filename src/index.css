@@ -24,6 +24,12 @@
     --input: 210 20% 82%;
     --ring: 210 45% 25%;
     --radius: 0.5rem;
+
+    /* Category Colors - Update these to change colors across the entire app */
+    --category-rebuild: 59 130 246;        /* Blue */
+    --category-ale: 245 158 11;             /* Amber */
+    --category-personal-property: 236 72 153; /* Pink */
+    --category-all-coverages: 34 197 94;    /* Emerald/Green */
   }
 }
 
