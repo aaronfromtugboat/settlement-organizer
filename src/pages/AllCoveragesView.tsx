@@ -245,7 +245,6 @@ export function AllCoveragesView() {
   
   const totalLimit = settlementData.categories.reduce((s, c) => s + c.limit, 0);
   const totalPaid = settlementData.categories.reduce((s, c) => s + Math.min(c.paid, c.limit), 0);
-  const totalRemaining = Math.max(0, totalLimit - totalPaid);
   
   // Calculate utilization for each category
   const allUtilization = totalLimit ? (totalPaid / totalLimit) * 100 : 0;

@@ -124,7 +124,6 @@ function Stat({ label, value, sub }: { label: string; value: string; sub?: strin
 }
 
 function SubItem({ item, color }: { item: typeof rebuildGroups[0]['items'][0]; color: string }) {
-  const remaining = Math.max(0, item.limit - item.paid);
   const util = item.limit ? (item.paid / item.limit) * 100 : 0;
   
   const handleClick = () => {
